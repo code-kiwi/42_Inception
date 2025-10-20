@@ -1,14 +1,24 @@
 FROM debian:12
 
-RUN apt update -y \
-    && apt upgrade -y \
-    && apt install mariadb-server gettext-base -y \
-    && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /run/mysqld /var/log/mysql /var/lib/mysql \
-	&& chown mysql:mysql /run/mysqld /var/log/mysql /var/lib/mysql
+# Install MariaDB server
+RUN apt update && \
+	apt upgrade && \
+    apt install -y mariadb-server && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/*
 
+# Copy configuration files
 COPY conf/50-server.cnf	/etc/mysql/mariadb.conf.d/50-server.cnf
+COPY tools/script.sh /usr/local/bin/script.sh
+RUN chmod +x /usr/local/bin/script.sh
 
+# Create necessary directories
+RUN mkdir -p /var/run/mysqld && \
+    chown mysql:mysql /var/run/mysqld
+
+# Expose port 3306
 EXPOSE 3306
 
-CMD ["mysqld_safe"]
+# Start MariaDB
+ENTRYPOINT ["/usr/local/bin/script.sh"]
+CMD [ "mysqld" ]
