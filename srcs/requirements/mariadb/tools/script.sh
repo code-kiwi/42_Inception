@@ -1,28 +1,34 @@
 #!/bin/bash
+set -e
 
-# --- Variables pour le test ---
-export MYSQL_ROOT_PASSWORD=root_pass
-export MYSQL_DATABASE=testdb
-export MYSQL_USER=testuser
-export MYSQL_PASSWORD=testpass
+# Check that necessary variables exist
+: "${MYSQL_ROOT_PASSWORD:?Variable MYSQL_ROOT_PASSWORD undefined}"
+: "${MYSQL_DATABASE:?Variable MYSQL_DATABASE undefined}"
+: "${MYSQL_USER:?Variable MYSQL_USER undefined}"
+: "${MYSQL_PASSWORD:?Variable MYSQL_PASSWORD undefined}"
 
-echo "[INFO] Ensuring database and user exist..."
+echo "[INFO] MariaDB initialization..."
 
 # Start MariaDB in the background
 mysqld_safe --skip-networking &
-sleep 10
+echo "[INFO] Waiting for MariaDB to start..."
+until mysqladmin ping &>/dev/null; do sleep 1; done
 
-# Create DB and user
-mysql -u root -p"${MYSQL_ROOT_PASSWORD}" <<EOF
-ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
-CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
-CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
-FLUSH PRIVILEGES;
-EOF
+# Check if DB to create
+DB_EXISTS=$(mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "SHOW DATABASES LIKE '$MYSQL_DATABASE';" | grep "$MYSQL_DATABASE" || true)
+
+if [ -z "$DB_EXISTS" ];
+then
+    # Execute sql init script
+    echo "[INFO] Database $MYSQL_DATABASE missing. Creation script execution..."
+    envsubst < /usr/local/bin/init.sql | mysql -u root
+else
+    echo "[INFO] Database $MYSQL_DATABASE already existing..."
+fi
 
 # Shut down temporary instance
 mysqladmin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
 
 # Start MariaDB normally
+echo "[INFO] MariaDB start..."
 exec mysqld_safe
