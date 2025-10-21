@@ -6,7 +6,7 @@
 #    By: mhotting <mhotting@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/20 11:29:32 by mhotting          #+#    #+#              #
-#    Updated: 2025/10/20 12:26:35 by mhotting         ###   ########.fr        #
+#    Updated: 2025/10/21 08:25:59 by mhotting         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,8 @@ DOCKER_COMPOSE_FILE	=	./srcs/docker-compose.yml
 DOCKER_COMPOSE_CMD	=	docker compose -f $(DOCKER_COMPOSE_FILE) -p $(NAME)
 
 DATA_DIR			=	$(HOME)/data/
-DB_DIR				= $(DATA_DIR)mariadb
-WP_DIR				= $(DATA_DIR)wordpress
+DB_DIR				=	$(DATA_DIR)mariadb
+WP_DIR				=	$(DATA_DIR)wordpress
 
 all: up
 
