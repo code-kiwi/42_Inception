@@ -6,7 +6,7 @@
 #    By: mhotting <mhotting@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/20 11:29:32 by mhotting          #+#    #+#              #
-#    Updated: 2025/10/21 08:25:59 by mhotting         ###   ########.fr        #
+#    Updated: 2025/10/23 00:46:20 by mhotting         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ WP_DIR				=	$(DATA_DIR)wordpress
 
 all: up
 
-up: $(DATA_DIR) $(WP_DIR)
+up: $(DATA_DIR) $(WP_DIR) $(DB_DIR)
 	cp -n $(HOME)/.env ./srcs || true
 	$(DOCKER_COMPOSE_CMD) up --build -d
 
@@ -41,6 +41,9 @@ fclean: clean
 	rm -rf $(DATA_DIR)
 
 re: fclean all
+
+$(DATA_DIR):
+	mkdir -p $(DATA_DIR)
 
 $(DB_DIR):
 	mkdir -p $(DB_DIR)
