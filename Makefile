@@ -6,7 +6,7 @@
 #    By: mhotting <mhotting@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/20 11:29:32 by mhotting          #+#    #+#              #
-#    Updated: 2025/10/23 00:46:20 by mhotting         ###   ########.fr        #
+#    Updated: 2025/10/23 00:48:20 by mhotting         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ clean:
 	$(DOCKER_COMPOSE_CMD) down --volumes --rmi all --remove-orphans
 
 fclean: clean
-	rm -rf $(DATA_DIR)
+	sudo rm -rf $(DATA_DIR)
 
 re: fclean all
 
