@@ -74,4 +74,5 @@ else
     echo "[INFO] WordPress already installed..."
 fi
 
-exec php-fpm8.2 -F
+# exec php-fpm8.2 -F
+exec php-fpm8.2 --nodaemonize --fpm-config /etc/php82/php-fpm.d/www.conf
