@@ -19,7 +19,7 @@ services:
       - wordpress:/var/www/html
     networks:
       - inception
-    depends_on: 
+    depends_on:
       - mariadb
     restart: on-failure
 
@@ -34,7 +34,7 @@ services:
       - "443:443"
     networks:
       - inception
-    depends_on: 
+    depends_on:
       - wordpress
     restart: on-failure
 
