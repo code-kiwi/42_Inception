@@ -23,24 +23,6 @@ mv wp-cli.phar /usr/local/bin/wp
 mkdir -p /var/www/html
 cd /var/www/html
 
-# Database availability check
-# max_attempts=20
-# attempt=1
-# until wp db check \
-#       --dbname="$MYSQL_DATABASE" \
-#       --dbuser="$MYSQL_USER" \
-#       --dbpass="$MYSQL_PASSWORD" \
-#       --dbhost="mariadb:3306" \
-#       --allow-root; do
-#     echo "[INFO] Waiting for database... (attempt $attempt)"
-#     sleep 3
-#     attempt=$((attempt + 1))
-#     if [ $attempt -gt $max_attempts ]; then
-#         echo "[ERROR] Database not reachable after $max_attempts attempts."
-#         exit 1
-#     fi
-# done
-
 # WP install
 if [ ! -e wp-config.php ]; then
         echo "[INFO] WordPress install..."
